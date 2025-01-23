@@ -1,0 +1,38 @@
+# project1 Docker Compose | php8 and apache2
+
+services:
+  php:
+    build:
+      context: ../..
+      dockerfile: projects/project1/Dockerfile
+    container_name: project1_php
+    volumes:
+      - ./testsrc:/var/www/html
+      # - ./src:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini
+      # Enable the following lines to use global configs after creating/adding the files
+      # Make sure to set correct permissions for the files (especially git private keys 600)
+      # - ../../global-configs/.gitconfig:/var/www/.gitconfig
+      # - ../../global-configs/.ssh:/var/www/.ssh
+    networks:
+      - shared-network
+
+  apache:
+    image: httpd:2.4
+    container_name: project1_apache
+    volumes:
+      - ./testsrc:/var/www/html
+      # - ./src:/var/www/html
+      - ./apache.conf:/usr/local/apache2/conf/httpd.conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.project1.rule=Host(`project1.localhost`)"
+      - "traefik.http.services.project1.loadbalancer.server.port=80"
+    networks:
+      - shared-network
+    depends_on:
+      - php
+
+networks:
+  shared-network:
+    external: true

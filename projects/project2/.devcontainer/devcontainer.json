@@ -1,0 +1,20 @@
+{
+    "name": "project2 Dev Container",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "php", // PHP service name in docker-compose.yml
+    "workspaceFolder": "/var/www/html", // Path inside the container
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "felixfbecker.php-debug", // Xdebug support
+                "bmewburn.vscode-intelephense-client" // PHP IntelliSense
+            ],
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php", // Path inside the container
+                "php.executablePath": "/usr/local/bin/php"
+            }
+        }
+    },
+    "postCreateCommand": "eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa",
+    "remoteUser": "www-data" // Set user inside container for permissions
+}

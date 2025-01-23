@@ -1,0 +1,10 @@
+entryPoints:
+  http:
+    address: ":80"
+
+providers:
+  docker:
+    exposedByDefault: false # Only proxy containers with labels
+
+log:
+  level: DEBUG

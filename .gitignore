@@ -1,0 +1,17 @@
+# ignore all /src folders contents
+**/src/*
+
+# ignore git related config in global-configs folder
+global-configs/.ssh/*
+!global-configs/.ssh/.gitkeep
+
+# ignore all files in data folders but keep folder with gitkeep
+shared-services/mysql/data/*
+shared-services/postgres/data/*
+!shared-services/mysql/data/.gitkeep
+!shared-services/postgres/data/.gitkeep
+
+*.sql
+*.dump
+*.log
+*.gz

@@ -1,0 +1,41 @@
+# Postgres and pgAdmin services
+
+services:
+  postgredb:
+    image: postgres:latest
+    container_name: local_postgres
+    hostname: local_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432" # Expose PostgreSQL for projects
+    volumes:
+      - ./data:/var/lib/postgresql/data # Persist PostgreSQL data
+    networks:
+      - shared-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 10 # Set log level to DEBUG
+      PGADMIN_CONFIG_MAX_SESSION_IDLE_TIME: 600 # Set max session idle time
+      PGADMIN_CONFIG_MAX_QUERY_LENGTH: 1048576 # Set max query length
+    ports:
+      - "8081:80" # Expose pgAdmin internally
+    depends_on:
+      - postgredb # Ensure PostgreSQL starts before pgAdmin
+    networks:
+      - shared-network
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.pgadmin.rule: "Host(`pgadmin.localhost`)"
+      traefik.http.services.pgadmin.loadbalancer.server.port: "80"
+
+networks:
+  shared-network:
+    name: shared-network

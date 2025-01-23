@@ -1,0 +1,44 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: local_databases
+    hostname: local_databases
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_HOST: local_databases
+    ports:
+      - "3306:3306" # Expose MySQL for projects
+    volumes:
+      - ./data:/var/lib/mysql # Persist MySQL data
+    networks:
+      - shared-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: local_databases # MySQL service name
+      PMA_PORT: 3306 # Port of the MySQL service
+      MYSQL_ROOT_PASSWORD: root # MySQL root password
+      UPLOAD_LIMIT: 1G # Increase upload limit
+      MEMORY_LIMIT: 1G # Increase memory limit
+      MAX_EXECUTION_TIME: 600 # Increase execution time
+      POST_MAX_SIZE: 1G # Increase post size
+      MAX_INPUT_TIME: 600 # Increase input time
+      UPLOAD_MAX_FILESIZE: 1G # Increase upload file size
+    ports:
+      - "8080:80" # Expose phpMyAdmin internally
+    depends_on:
+      - db # Ensure MySQL starts before phpMyAdmin
+    networks:
+      - shared-network
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.databases.rule: "Host(`databases.localhost`)"
+      traefik.http.services.databases.loadbalancer.server.port: "80"
+
+networks:
+  shared-network:
+    name: shared-network

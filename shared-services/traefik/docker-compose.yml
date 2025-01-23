@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v2.6
+    container_name: traefik
+    ports:
+      - "80:80" # HTTP
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Access Docker API
+      - ./traefik.yml:/etc/traefik/traefik.yml # Traefik static config
+    networks:
+      - shared-network
+
+networks:
+  shared-network:
+    name: shared-network
