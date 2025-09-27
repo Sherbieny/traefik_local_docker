@@ -1,0 +1,17 @@
+{
+    "name": "Eccube 4.3 Dev Container",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "php",
+    "workspaceFolder": "/var/www/html",
+    "remoteUser": "www-data",
+    "shutdownAction": "none",
+    "customizations": {
+        "vscode": {
+            "extensions": ["felixfbecker.php-debug", "bmewburn.vscode-intelephense-client"],
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "php.executablePath": "/usr/local/bin/php"
+            }
+        }
+    }
+}

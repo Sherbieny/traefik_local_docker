@@ -1,0 +1,57 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "eccube npm build",
+            "type": "shell",
+            "command": "docker exec -it makumaker2_nodejs npm run build",
+            "problemMatcher": [],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "eccube npx webpack",
+            "type": "shell",
+            "command": "docker exec -it makumaker2_nodejs npx webpack",
+            "problemMatcher": [],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "prettier: format js and scss",
+            "type": "shell",
+            "command": "docker exec -it makumaker2_nodejs npx prettier --write '**/*.{js,scss}'",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "php-cs-fixer: fix",
+            "type": "shell",
+            "command": "php vendor/bin/php-cs-fixer fix",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "php-cs-fixer: fix --dry-run",
+            "type": "shell",
+            "command": "php vendor/bin/php-cs-fixer fix --dry-run",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+    ]
+}

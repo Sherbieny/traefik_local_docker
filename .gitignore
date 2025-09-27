@@ -1,17 +1,30 @@
 # ignore all /src folders contents
 **/src/*
+*/src/*
+**/node_modules/*
+!projects/dashboard/src/index.html
 
-# ignore git related config in global-configs folder
-global-configs/.ssh/*
-!global-configs/.ssh/.gitkeep
-
-# ignore all files in data folders but keep folder with gitkeep
+# ignore mysql data folder contents
 shared-services/mysql/data/*
 shared-services/postgres/data/*
-!shared-services/mysql/data/.gitkeep
-!shared-services/postgres/data/.gitkeep
+
+# ignore git related config in global-configs folder
+global-configs/.git/*
+global-configs/.gitconfig
+global-configs/.ssh/*
+
+# ignore shared-assets folder contents
+shared-assets/*
 
 *.sql
 *.dump
 *.log
 *.gz
+*.DS_Store
+*.uuid
+
+# ignore all node_modules folders
+**/node_modules/*
+
+# ignore all .env files
+**/.env

@@ -1,0 +1,54 @@
+# Eccube 4.3 Enhanced Docker Compose
+
+services:
+    php:
+        build:
+            context: ../..
+            dockerfile: projects/eccube43/Dockerfile
+        container_name: eccube43_php
+        volumes:
+            #- ./testsrc:/var/www/html
+            - ./src:/var/www/html
+            - ./php.ini:/usr/local/etc/php/php.ini
+            # Enable the following lines to use global configs after creating/adding the files
+            # Make sure to set correct permissions for the files (especially git private keys 600)
+            - ../../global-configs/.gitconfig:/var/www/.gitconfig
+            - ../../global-configs/.ssh/id_rsa_nopass:/var/www/.ssh/id_rsa
+            - ../../global-configs/.ssh/id_rsa_nopass.pub:/var/www/.ssh/id_rsa.pub
+        networks:
+            - shared-network
+
+    apache:
+        image: httpd:2.4
+        container_name: eccube43_apache
+        volumes:
+            #- ./testsrc:/var/www/html
+            - ./src:/var/www/html
+            - ./apache.conf:/usr/local/apache2/conf/httpd.conf
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.eccube43.rule=Host(`eccube43.localhost`)'
+            - 'traefik.http.services.eccube43.loadbalancer.server.port=80'
+        networks:
+            - shared-network
+        depends_on:
+            - php
+
+    nodejs:
+        image: node:20-bullseye
+        container_name: eccube43_nodejs
+        volumes:
+            #- ./testsrc:/var/www/html
+            - ./src:/var/www/html
+            - ./node_modules:/var/www/html/node_modules
+        working_dir: /var/www/html
+        tty: true
+        networks:
+            - shared-network
+
+networks:
+    shared-network:
+        external: true
+
+volumes:
+    node_modules:
