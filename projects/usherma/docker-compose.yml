@@ -1,0 +1,19 @@
+# usherma Static Site Docker Compose | nginx
+
+services:
+    nginx:
+        image: nginx:alpine
+        container_name: usherma_nginx
+        volumes:
+            - ./testsrc:/usr/share/nginx/html:ro
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.usherma.rule=Host(`usherma.localhost`)'
+            - 'traefik.http.services.usherma.loadbalancer.server.port=80'
+        networks:
+            - shared-network
+
+networks:
+    shared-network:
+        external: true
