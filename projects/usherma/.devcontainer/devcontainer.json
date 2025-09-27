@@ -1,20 +1,38 @@
 {
-    "name": "project1 Dev Container",
+    "name": "Usherma Static Site Dev Container",
     "dockerComposeFile": "../docker-compose.yml",
-    "service": "php", // PHP service name in docker-compose.yml
-    "workspaceFolder": "/var/www/html", // Path inside the container
+    "service": "nginx",
+    "workspaceFolder": "/usr/share/nginx/html",
+    "shutdownAction": "none",
     "customizations": {
         "vscode": {
             "extensions": [
-                "felixfbecker.php-debug", // Xdebug support
-                "bmewburn.vscode-intelephense-client" // PHP IntelliSense
+                "ms-vscode.vscode-json",
+                "bradlc.vscode-tailwindcss",
+                "formulahendry.auto-rename-tag",
+                "christian-kohler.path-intellisense",
+                "ms-vscode.live-server",
+                "ritwickdey.liveserver",
+                "ms-vscode-remote.remote-containers",
+                "eamodio.gitlens",
+                "ms-vscode.hexeditor"
             ],
             "settings": {
-                "php.validate.executablePath": "/usr/local/bin/php", // Path inside the container
-                "php.executablePath": "/usr/local/bin/php"
+                "files.associations": {
+                    "*.html": "html",
+                    "*.css": "css",
+                    "*.js": "javascript"
+                },
+                "emmet.includeLanguages": {
+                    "html": "html",
+                    "css": "css"
+                },
+                "git.enableSmartCommit": true,
+                "git.autofetch": true,
+                "terminal.integrated.defaultProfile.linux": "bash"
             }
         }
     },
-    "postCreateCommand": "eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa",
-    "remoteUser": "www-data" // Set user inside container for permissions
+    "postCreateCommand": "git config --global --add safe.directory /usr/share/nginx/html",
+    "remoteUser": "root"
 }
